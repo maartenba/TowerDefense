@@ -4,9 +4,9 @@ job("00 - Generate license request") {
     //
     // After run:
     // 1. The activation file is echoed to build output, and should be saved as *.alf
-    // 2. Visit https://license.unity3d.com/manual"
-    // 3. Upload the file in the form"
-    // 4. Answer questions (unity pro vs personal edition, both will work, just pick the one you use)"
+    // 2. Visit https://license.unity3d.com/manual
+    // 3. Upload the file in the form
+    // 4. Answer questions (unity pro vs personal edition, both will work, just pick the one you use)
     // 5. Download 'Unity_v2019.x.ulf' file
     // 6. Copy the content of 'Unity_v2019.x.ulf' license file to the secret UNITY_LICENSE
 
