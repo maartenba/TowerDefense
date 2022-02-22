@@ -24,11 +24,7 @@ job("00 - Generate license request") {
         env.set("UNITY_PASSWORD", Secrets("unity_password"))
         
         shellScript {
-            content = """
-                export BUILD_TARGET=Android
-                export BUILD_PATH=${'$'}UNITY_DIR/Builds/${'$'}BUILD_TARGET/
-				mkdir -p ${'$'}BUILD_PATH
-                
+            content = """                
                 ${'$'}{UNITY_EXECUTABLE:-xvfb-run --auto-servernum --server-args='-screen 0 640x480x24' unity-editor} \
                   -batchmode \
                   -nographics \
@@ -61,6 +57,9 @@ job("10 - Build TowerDefense") {
         shellScript {
             content = """
                 ## Write license
+                mkdir -p /root/.cache/unity3d
+                mkdir -p /root/.local/share/unity3d/Unity/
+                
                 if [ -n "${'$'}UNITY_LICENSE" ]
                 then
                     echo "Writing '\${'$'}UNITY_LICENSE' to license file /root/.local/share/unity3d/Unity/Unity_lic.ulf"
