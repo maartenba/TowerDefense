@@ -18,7 +18,7 @@ job("Build TowerDefense") {
                   -quit \
                   -batchmode \
                   -nographics \
-                  -buildTarget $BUILD_TARGET \
+                  -buildTarget ${'$'}BUILD_TARGET \
                   ${'$'}BUILD_PATH \
                   -logFile /dev/stdout
                 
