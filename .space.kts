@@ -2,7 +2,7 @@ job("Build TowerDefense") {
     container(displayName = "Unity", image = "unityci/editor:ubuntu-2020.3.27f1-android-0.17.0") {
         resources {
             cpu = 4.cpu
-            memory = 16.gb
+            memory = 12.gb
         }
         
         // https://josusb.com/en/blog/building-unity-on-the-command-line/
