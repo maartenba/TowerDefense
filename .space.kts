@@ -1,3 +1,51 @@
+job("Generate license request") {
+    // This job needs to be run only once.
+    // Set the UNITY_USERNAME and UNITY_PASSWORD secrets to generate an activation file.
+    //
+    // After run:
+    // 1. The activation file is echoed to build output, and should be saved as *.alf
+    // 2. Visit https://license.unity3d.com/manual"
+    // 3. Upload the file in the form"
+    // 4. Answer questions (unity pro vs personal edition, both will work, just pick the one you use)"
+    // 5. Download 'Unity_v2019.x.ulf' file
+    // 6. Copy the content of 'Unity_v2019.x.ulf' license file to the secret UNITY_LICENSE
+
+    startOn {
+        gitPush { enabled = false }
+    }
+    
+    container(displayName = "Unity", image = "unityci/editor:ubuntu-2020.3.27f1-android-0.17.0") {
+        resources {
+            cpu = 2.cpu
+            memory = 8.gb
+        }
+        
+        env.set("UNITY_USERNAME", Secrets("UNITY_USERNAME"))
+        env.set("UNITY_PASSWORD", Secrets("UNITY_PASSWORD"))
+        
+        shellScript {
+            content = """
+                export BUILD_TARGET=Android
+                export BUILD_PATH=${'$'}UNITY_DIR/Builds/${'$'}BUILD_TARGET/
+				mkdir -p ${'$'}BUILD_PATH
+                
+                ${'$'}{UNITY_EXECUTABLE:-xvfb-run --auto-servernum --server-args='-screen 0 640x480x24' unity-editor} \
+                  -batchmode \
+                  -nographics \
+                  -username "${'$'}UNITY_USERNAME" -password "${'$'}UNITY_PASSWORD" \
+                  -logFile /dev/stdout
+                
+                cat ./unity-output.log | grep 'LICENSE SYSTEM .* Posting *' | sed 's/.*Posting *//' > "/tmp/request.txt"
+                
+                echo "----------------------"
+                cat "/tmp/request.txt"
+                echo "----------------------"
+
+            """.trimIndent()
+        }
+    }
+}
+
 job("Build TowerDefense") {
     container(displayName = "Unity", image = "unityci/editor:ubuntu-2020.3.27f1-android-0.17.0") {
         resources {
