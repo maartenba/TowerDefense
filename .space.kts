@@ -1,4 +1,4 @@
-job("Generate license request") {
+job("00 - Generate license request") {
     // This job needs to be run only once.
     // Set the UNITY_USERNAME and UNITY_PASSWORD secrets to generate an activation file.
     //
@@ -46,17 +46,29 @@ job("Generate license request") {
     }
 }
 
-job("Build TowerDefense") {
+job("10 - Build TowerDefense") {
     container(displayName = "Unity", image = "unityci/editor:ubuntu-2020.3.27f1-android-0.17.0") {
         resources {
             cpu = 4.cpu
             memory = 12.gb
         }
         
+        env.set("UNITY_LICENSE", Secrets("unity_license"))
+        
         // https://josusb.com/en/blog/building-unity-on-the-command-line/
         // https://gitlab.com/game-ci/unity3d-gitlab-ci-example/-/blob/main/ci/build.sh
         shellScript {
             content = """
+                ## Write license
+                if [ -n "${'$'}UNITY_LICENSE" ]
+                then
+                    echo "Writing '\${'$'}UNITY_LICENSE' to license file /root/.local/share/unity3d/Unity/Unity_lic.ulf"
+                    echo "${'$'}{UNITY_LICENSE}" | tr -d '\r' > /root/.local/share/unity3d/Unity/Unity_lic.ulf
+                else
+                    echo "'UNITY_LICENSE' environment variable not found"
+                fi
+
+                ## Build
                 export BUILD_TARGET=Android
                 export BUILD_PATH=${'$'}UNITY_DIR/Builds/${'$'}BUILD_TARGET/
 				mkdir -p ${'$'}BUILD_PATH
