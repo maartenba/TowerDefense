@@ -20,8 +20,8 @@ job("Generate license request") {
             memory = 8.gb
         }
         
-        env.set("UNITY_USERNAME", Secrets("UNITY_USERNAME"))
-        env.set("UNITY_PASSWORD", Secrets("UNITY_PASSWORD"))
+        env.set("UNITY_USERNAME", Secrets("unity_username"))
+        env.set("UNITY_PASSWORD", Secrets("unity_password"))
         
         shellScript {
             content = """
