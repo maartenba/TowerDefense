@@ -33,7 +33,8 @@ job("00 - Generate license request") {
                   -batchmode \
                   -nographics \
                   -username "${'$'}UNITY_USERNAME" -password "${'$'}UNITY_PASSWORD" \
-                  -logFile /dev/stdout
+                  -logFile /dev/stdout | tee ./unity-output.log
+
                 
                 cat ./unity-output.log | grep 'LICENSE SYSTEM .* Posting *' | sed 's/.*Posting *//' > "/tmp/request.txt"
                 
