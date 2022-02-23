@@ -99,5 +99,11 @@ job("10 - Build TowerDefense") {
                 fi
             """.trimIndent()
         }
+        
+        files("artifacts") {
+            upload {
+                "/mnt/space/share/artifacts.tar.gz" to "artifacts.tar.gz"
+            }
+        }
     }
 }
