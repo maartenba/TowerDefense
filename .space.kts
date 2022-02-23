@@ -100,10 +100,10 @@ job("10 - Build TowerDefense") {
             """.trimIndent()
         }
         
-        files("artifacts") {
+        /*files("artifacts") {
             upload {
                 "/mnt/space/share/artifacts.tar.gz" to "artifacts.tar.gz"
             }
-        }
+        }*/
     }
 }
