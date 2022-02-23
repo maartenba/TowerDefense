@@ -86,8 +86,12 @@ job("10 - Build TowerDefense") {
                 
                 if [ ${'$'}UNITY_EXIT_CODE -eq 0 ]; then
                   echo "Run succeeded, no failures occurred";
+                  
+                  tar -czvf /mnt/space/share/artifacts.tar.gz ${'$'}BUILD_PATH
                 elif [ ${'$'}UNITY_EXIT_CODE -eq 2 ]; then
                   echo "Run succeeded, some tests failed";
+                  
+                  tar -czvf /mnt/space/share/artifacts.tar.gz ${'$'}BUILD_PATH
                 elif [ ${'$'}UNITY_EXIT_CODE -eq 3 ]; then
                   echo "Run failure (other failure)";
                 else
