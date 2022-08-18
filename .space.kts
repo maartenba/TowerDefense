@@ -97,13 +97,13 @@ job("10 - Build TowerDefense") {
                 else
                   echo "Unexpected exit code ${'$'}UNITY_EXIT_CODE";
                 fi
+                
+                echo Uploading artifacts...
+                SOURCE_PATH=/mnt/space/share/artifacts.tar.gz
+                TARGET_PATH=${'$'}JB_SPACE_EXECUTION_NUMBER/artifacts.tar.gz
+                REPO_URL=https://files.pkg.jetbrains.space/demo/p/guide/towerdefense
+                curl -i -H "Authorization: Bearer ${'$'}JB_SPACE_CLIENT_TOKEN" -F file=@"${'$'}SOURCE_PATH" ${'$'}REPO_URL/${'$'}TARGET_PATH
             """.trimIndent()
         }
-        
-        /*files("artifacts") {
-            upload {
-                "/mnt/space/share/artifacts.tar.gz" to "artifacts.tar.gz"
-            }
-        }*/
     }
 }
