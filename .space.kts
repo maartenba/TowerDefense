@@ -94,10 +94,10 @@ job("10 - Build TowerDefense") {
                 fi
                 
                 echo Uploading artifacts...
-                echo https://files.pkg.jetbrains.space/demo/p/td/towerdefense/space/${'$'}JB_SPACE_EXECUTION_NUMBER/towerdefense-linux-x64
-                ls -la
-                ls -la artifacts/
-                curl -i -H "Authorization: Bearer ${'$'}JB_SPACE_CLIENT_TOKEN" -F file=@"artifacts/towerdefense-linux-x64" https://files.pkg.jetbrains.space/demo/p/td/towerdefense/space/${'$'}JB_SPACE_EXECUTION_NUMBER/towerdefense-linux-x64
+                rm -rf artifacts/UnityPlayer.so
+                rm -rf artifacts/towerdefense-linux-x64_BackUpThisFolder_ButDontShipItWithYourGame
+                tar -zcvf artifacts.tar.gz artifacts/
+                curl -i -H "Authorization: Bearer ${'$'}JB_SPACE_CLIENT_TOKEN" -F file=@"artifacts.tar.gz" https://files.pkg.jetbrains.space/demo/p/td/towerdefense/space/${'$'}JB_SPACE_EXECUTION_NUMBER/towerdefense-linux-x64
             """.trimIndent()
         }
     }
