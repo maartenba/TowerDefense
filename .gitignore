@@ -26,5 +26,7 @@
 .idea/**/modules.xml
 Assets/Plugins.meta
 Assets/Plugins/
+Logs/
+
 
 .DS_Store
