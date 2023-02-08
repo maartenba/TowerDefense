@@ -27,6 +27,7 @@
 Assets/Plugins.meta
 Assets/Plugins/
 Logs/
-
+artifacts/
+UnityPlayer.so
 
 .DS_Store
