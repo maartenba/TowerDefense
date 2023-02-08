@@ -9,19 +9,19 @@ namespace Editor
         [MenuItem("Services/Build/Build Linux x64")]
         public static void LinuxBuild()
         {
-            Build("artifacts/towerdefense-linux-x64", BuildTarget.StandaloneLinux64);
+            Build("artifacts/linux-x64/towerdefense", BuildTarget.StandaloneLinux64);
         }
         
         [MenuItem("Services/Build/Build macOS (OSX)")]
         public static void MacOsBuild()
         {
-            Build("artifacts/towerdefense-ios", BuildTarget.StandaloneOSX);
+            Build("artifacts/ios/towerdefense", BuildTarget.StandaloneOSX);
         }
         
         [MenuItem("Services/Build/Build Windows x64")]
         public static void WindowsBuild()
         {
-            Build("artifacts/towerdefense-windows-x64", BuildTarget.StandaloneWindows64);
+            Build("artifacts/windows-x64/towerdefense", BuildTarget.StandaloneWindows64);
         }
 
         private static void Build(string locationPathName, BuildTarget target)
