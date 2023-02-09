@@ -80,8 +80,8 @@ fun StepsScope.buildUnity(
 ) {
     container(displayName = displayName, image = containerImage) {
         resources {
-            cpu = 4.cpu
-            memory = 12.gb
+            cpu = 8.cpu
+            memory = 16.gb
         }
 
         env.set("UNITY_LICENSE", Secrets("unity_license"))
