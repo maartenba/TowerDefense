@@ -29,5 +29,6 @@ Assets/Plugins/
 Logs/
 artifacts/
 UnityPlayer.so
+UserSettings/Layouts/*
 
 .DS_Store
