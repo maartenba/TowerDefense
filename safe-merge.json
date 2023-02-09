@@ -1,0 +1,16 @@
+{
+    "version": "1.0",
+    "retry-policy": {
+        "num-retries": 1,
+        "reuse-merge": true
+    },
+    "builds": [
+        {
+            "teamcity": {
+                "configuration": "TowerDefense_BuildGame",
+                "url": "https://demo-space.teamcity.com",
+                "token": "${teamcity-safe-merge}"
+            }
+        }
+    ]
+}
