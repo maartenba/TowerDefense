@@ -57,8 +57,8 @@ job("10 - Build TowerDefense") {
             displayName = "Build macOS",
             containerImage = "unityci/editor:2021.3.17f1-mac-mono-1.0.1",
             executeMethod = "Editor.BuildPlayer.MacOsBuild",
-            artifactsPath = "artifacts/ios/",
-            publishArtifactFileName = "towerdefense-ios.tar.gz"
+            artifactsPath = "artifacts/macos/",
+            publishArtifactFileName = "towerdefense-macos.tar.gz"
         )
 
         buildUnity(
@@ -67,6 +67,22 @@ job("10 - Build TowerDefense") {
             executeMethod = "Editor.BuildPlayer.WindowsBuild",
             artifactsPath = "artifacts/windows-x64/",
             publishArtifactFileName = "towerdefense-windows-x64.tar.gz"
+        )
+
+        buildUnity(
+            displayName = "Build iOS",
+            containerImage = "unityci/editor:2021.3.17f1-ios-1.0.1",
+            executeMethod = "Editor.BuildPlayer.IosBuild",
+            artifactsPath = "artifacts/ios/",
+            publishArtifactFileName = "towerdefense-ios.tar.gz"
+        )
+
+        buildUnity(
+            displayName = "Build Android",
+            containerImage = "unityci/editor:2021.3.17f1-android-1.0.1",
+            executeMethod = "Editor.BuildPlayer.AndroidBuild",
+            artifactsPath = "artifacts/android/",
+            publishArtifactFileName = "towerdefense-android.tar.gz"
         )
     }
 }

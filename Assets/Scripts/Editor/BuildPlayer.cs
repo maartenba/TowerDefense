@@ -15,7 +15,19 @@ namespace Editor
         [MenuItem("Services/Build/Build macOS (OSX)")]
         public static void MacOsBuild()
         {
-            Build("artifacts/ios/towerdefense", BuildTarget.StandaloneOSX);
+            Build("artifacts/macos/towerdefense", BuildTarget.StandaloneOSX);
+        }
+        
+        [MenuItem("Services/Build/Build iOS")]
+        public static void IosBuild()
+        {
+            Build("artifacts/ios/towerdefense", BuildTarget.iOS);
+        }
+        
+        [MenuItem("Services/Build/Build Android")]
+        public static void AndroidBuild()
+        {
+            Build("artifacts/android/towerdefense", BuildTarget.Android);
         }
         
         [MenuItem("Services/Build/Build Windows x64")]
