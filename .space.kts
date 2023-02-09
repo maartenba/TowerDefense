@@ -43,48 +43,62 @@ job("00 - Generate license request") {
     }
 }
 
-job("10 - Build TowerDefense") {
-    parallel {
-        buildUnity(
-            displayName = "Build Linux x64",
-            containerImage = "unityci/editor:ubuntu-2021.3.17f1-linux-il2cpp-1.0.1",
-            executeMethod = "Editor.BuildPlayer.LinuxBuild",
-            artifactsPath = "artifacts/linux-x64/",
-            publishArtifactFileName = "towerdefense-linux-x64.tar.gz"
-        )
+job("Build TowerDefense - Linux x64") {
+    buildUnity(
+        displayName = "Build Linux x64",
+        containerImage = "unityci/editor:ubuntu-2021.3.17f1-linux-il2cpp-1.0.1",
+        executeMethod = "Editor.BuildPlayer.LinuxBuild",
+        artifactsPath = "artifacts/linux-x64/",
+        publishArtifactFileName = "towerdefense-linux-x64.tar.gz"
+    )
+}
 
-        buildUnity(
-            displayName = "Build macOS",
-            containerImage = "unityci/editor:2021.3.17f1-mac-mono-1.0.1",
-            executeMethod = "Editor.BuildPlayer.MacOsBuild",
-            artifactsPath = "artifacts/macos/",
-            publishArtifactFileName = "towerdefense-macos.tar.gz"
-        )
+job("Build TowerDefense - macOS") {
+    buildUnity(
+        displayName = "Build macOS",
+        containerImage = "unityci/editor:2021.3.17f1-mac-mono-1.0.1",
+        executeMethod = "Editor.BuildPlayer.MacOsBuild",
+        artifactsPath = "artifacts/macos/",
+        publishArtifactFileName = "towerdefense-macos.tar.gz"
+    )
+}
 
-        buildUnity(
-            displayName = "Build Windows",
-            containerImage = "unityci/editor:2021.3.17f1-windows-mono-1.0.1",
-            executeMethod = "Editor.BuildPlayer.WindowsBuild",
-            artifactsPath = "artifacts/windows-x64/",
-            publishArtifactFileName = "towerdefense-windows-x64.tar.gz"
-        )
+job("Build TowerDefense - Windows x64") {
+    buildUnity(
+        displayName = "Build Windows",
+        containerImage = "unityci/editor:2021.3.17f1-windows-mono-1.0.1",
+        executeMethod = "Editor.BuildPlayer.WindowsBuild",
+        artifactsPath = "artifacts/windows-x64/",
+        publishArtifactFileName = "towerdefense-windows-x64.tar.gz"
+    )
+}
 
-        buildUnity(
-            displayName = "Build iOS",
-            containerImage = "unityci/editor:2021.3.17f1-ios-1.0.1",
-            executeMethod = "Editor.BuildPlayer.IosBuild",
-            artifactsPath = "artifacts/ios/",
-            publishArtifactFileName = "towerdefense-ios.tar.gz"
-        )
-
-        buildUnity(
-            displayName = "Build Android",
-            containerImage = "unityci/editor:2021.3.17f1-android-1.0.1",
-            executeMethod = "Editor.BuildPlayer.AndroidBuild",
-            artifactsPath = "artifacts/android/",
-            publishArtifactFileName = "towerdefense-android.tar.gz"
-        )
+job("Build TowerDefense - Android") {
+    startOn {
+        gitPush { enabled = false }
     }
+    
+    buildUnity(
+        displayName = "Build Android",
+        containerImage = "unityci/editor:2021.3.17f1-android-1.0.1",
+        executeMethod = "Editor.BuildPlayer.AndroidBuild",
+        artifactsPath = "artifacts/android/",
+        publishArtifactFileName = "towerdefense-android.tar.gz"
+    )
+}
+
+job("Build TowerDefense - iOS") {
+    startOn {
+        gitPush { enabled = false }
+    }
+    
+    buildUnity(
+        displayName = "Build iOS",
+        containerImage = "unityci/editor:2021.3.17f1-ios-1.0.1",
+        executeMethod = "Editor.BuildPlayer.IosBuild",
+        artifactsPath = "artifacts/ios/",
+        publishArtifactFileName = "towerdefense-ios.tar.gz"
+    )
 }
 
 fun StepsScope.buildUnity(
