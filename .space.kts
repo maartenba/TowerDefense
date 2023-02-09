@@ -44,14 +44,48 @@ job("00 - Generate license request") {
 }
 
 job("10 - Build TowerDefense") {
-    container(displayName = "Build Linux x64", image = "unityci/editor:ubuntu-2021.3.17f1-linux-il2cpp-1.0.1") {
+    parallel {
+        buildUnity(
+            displayName = "Build Linux x64",
+            containerImage = "unityci/editor:ubuntu-2021.3.17f1-linux-il2cpp-1.0.1",
+            executeMethod = "Editor.BuildPlayer.LinuxBuild",
+            artifactsPath = "artifacts/linux-x64/",
+            publishArtifactFileName = "towerdefense-linux-x64.tar.gz"
+        )
+
+        buildUnity(
+            displayName = "Build macOS",
+            containerImage = "unityci/editor:2021.3.17f1-mac-mono-1.0.1",
+            executeMethod = "Editor.BuildPlayer.MacOsBuild",
+            artifactsPath = "artifacts/ios/",
+            publishArtifactFileName = "towerdefense-ios.tar.gz"
+        )
+
+        buildUnity(
+            displayName = "Build Windows",
+            containerImage = "unityci/editor:2021.3.17f1-windows-mono-1.0.1",
+            executeMethod = "Editor.BuildPlayer.WindowsBuild",
+            artifactsPath = "artifacts/windows-x64/",
+            publishArtifactFileName = "towerdefense-windows-x64.tar.gz"
+        )
+    }
+}
+
+fun StepsScope.buildUnity(
+    displayName: String,
+    containerImage: String,
+    executeMethod: String,
+    artifactsPath: String,
+    publishArtifactFileName: String
+) {
+    container(displayName = displayName, image = containerImage) {
         resources {
             cpu = 4.cpu
             memory = 12.gb
         }
-        
+
         env.set("UNITY_LICENSE", Secrets("unity_license"))
-        
+
         // https://josusb.com/en/blog/building-unity-on-the-command-line/
         // https://gitlab.com/game-ci/unity3d-gitlab-ci-example/-/blob/main/ci/build.sh
         shellScript {
@@ -78,7 +112,7 @@ job("10 - Build TowerDefense") {
                   -quit \
                   -batchmode \
                   -nographics \
-                  -executeMethod Editor.BuildPlayer.LinuxBuild \
+                  -executeMethod $executeMethod \
                   -logFile /dev/stdout
                 
                 UNITY_EXIT_CODE=${'$'}?
@@ -94,8 +128,8 @@ job("10 - Build TowerDefense") {
                 fi
                 
                 echo Uploading artifacts...
-                tar -zcvf linux-x64.tar.gz artifacts/linux-x64/
-                curl -i -H "Authorization: Bearer ${'$'}JB_SPACE_CLIENT_TOKEN" -F file=@"linux-x64.tar.gz" https://files.pkg.jetbrains.space/demo/p/td/towerdefense/space/${'$'}JB_SPACE_EXECUTION_NUMBER/towerdefense-linux-x64
+                tar -zcvf $publishArtifactFileName $artifactsPath
+                curl -i -H "Authorization: Bearer ${'$'}JB_SPACE_CLIENT_TOKEN" -F file=@"$publishArtifactFileName" https://files.pkg.jetbrains.space/demo/p/td/towerdefense/space/${'$'}JB_SPACE_EXECUTION_NUMBER/
             """.trimIndent()
         }
     }
