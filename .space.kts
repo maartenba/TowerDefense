@@ -8,7 +8,7 @@ job("00 - Generate license request") {
     // 3. Upload the file in the form
     // 4. Answer questions (unity pro vs personal edition, both will work, just pick the one you use)
     // 5. Download 'Unity_v2021.x.ulf' file
-    // 6. Copy the content of 'Unity_v2021.x.ulf' license file to the secret UNITY_LICENSE
+    // 6. Copy the content of 'Unity_v2021.x.ulf' license file to the secret unity_license
 
     startOn {
         gitPush { enabled = false }
@@ -35,15 +35,22 @@ job("00 - Generate license request") {
                 cat ./unity-output.log | grep 'LICENSE SYSTEM .* Posting *' | sed 's/.*Posting *//' > "/tmp/request.txt"
                 
                 echo "----------------------"
+                echo "1. Save the below output as *.alf"
+                echo "2. Visit https://license.unity3d.com/manual
+                echo "3. Upload the file in the form
+                echo "4. Answer questions (unity pro vs personal edition, both will work, just pick the one you use)
+                echo "5. Download 'Unity_v20xx.x.ulf' file
+                echo "6. Copy the content of 'Unity_v20xx.x.ulf' license file to the Space project secret unity_license
+                echo "----------------------"
                 cat "/tmp/request.txt"
                 echo "----------------------"
-
             """.trimIndent()
         }
     }
 }
 
 job("Build TowerDefense - Linux x64") {
+
     buildUnity(
         displayName = "Build Linux x64",
         containerImage = "unityci/editor:ubuntu-2021.3.17f1-linux-il2cpp-1.0.1",
@@ -54,6 +61,7 @@ job("Build TowerDefense - Linux x64") {
 }
 
 job("Build TowerDefense - macOS") {
+
     buildUnity(
         displayName = "Build macOS",
         containerImage = "unityci/editor:2021.3.17f1-mac-mono-1.0.1",
@@ -64,6 +72,7 @@ job("Build TowerDefense - macOS") {
 }
 
 job("Build TowerDefense - Windows x64") {
+
     buildUnity(
         displayName = "Build Windows",
         containerImage = "unityci/editor:2021.3.17f1-windows-mono-1.0.1",
@@ -77,6 +86,7 @@ job("Build TowerDefense - Android") {
     startOn {
         gitPush { enabled = false }
     }
+
     
     buildUnity(
         displayName = "Build Android",
@@ -91,6 +101,7 @@ job("Build TowerDefense - iOS") {
     startOn {
         gitPush { enabled = false }
     }
+
     
     buildUnity(
         displayName = "Build iOS",
@@ -114,28 +125,20 @@ fun StepsScope.buildUnity(
             memory = 16.gb
         }
 
-        env.set("UNITY_LICENSE", Secrets("unity_license"))
+        fileInput {
+            source = FileSource.Text("{{ project:unity_license }}")
+            localPath = "/mnt/space/Unity_lic.ulf"
+        }
 
         // https://josusb.com/en/blog/building-unity-on-the-command-line/
         // https://gitlab.com/game-ci/unity3d-gitlab-ci-example/-/blob/main/ci/build.sh
         shellScript {
             content = """
-                ## Initialize folders
+                ## Initialize and copy license secret
                 mkdir -p /root/.cache/unity3d
                 mkdir -p /root/.local/share/unity3d/Unity/
-
-                ## Write license (when using the approach described in the "00 - Generate license request" job)
-                if [ -n "${'$'}UNITY_LICENSE" ]
-                then
-                    echo "Writing '\${'$'}UNITY_LICENSE' to license file /root/.local/share/unity3d/Unity/Unity_lic.ulf"
-                    echo "${'$'}{UNITY_LICENSE}" | tr -d '\r' > /root/.local/share/unity3d/Unity/Unity_lic.ulf
-                else
-                    echo "'UNITY_LICENSE' environment variable not found"
-                fi
-
-                ## Copy license from repository (when not using the approach described in the "00 - Generate license request" job)
-                cp Unity_lic.ulf /root/.local/share/unity3d/Unity
-
+                cp /mnt/space/Unity_lic.ulf /root/.local/share/unity3d/Unity
+                
                 ## Build
                 unity-editor \
                   -projectPath ./ \
