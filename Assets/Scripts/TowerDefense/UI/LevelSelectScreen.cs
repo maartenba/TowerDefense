@@ -69,8 +69,9 @@ namespace TowerDefense.UI
 				button.transform.localScale = Vector3.one;
 				m_Buttons.Add(button.GetComponent<Button>());
 
+        // TODO: add cheat code for game team to bypass this limitation
 				if (i > 0 && GameManager.instance != null &&
-                    GameManager.instance.GetStarsForLevel(m_LevelList[i - 1].id) == 0)
+                     GameManager.instance.GetStarsForLevel(m_LevelList[i - 1].id) == 0)
 				{
 					button.enabled = false;
 					button.GetComponent<Button>().interactable = false;
