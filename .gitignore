@@ -30,5 +30,8 @@ Logs/
 artifacts/
 UnityPlayer.so
 UserSettings/Layouts/*
+UserSettings/EditorUserSettings.asset
+*.lighting
+*.lighting.meta
 
 .DS_Store
